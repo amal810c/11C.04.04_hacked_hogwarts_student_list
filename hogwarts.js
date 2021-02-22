@@ -11,13 +11,153 @@ let container = document.querySelector("section");
 function initPage() {
   console.log("ready");
 
+  readBtns();
+
   fetchStudentData();
+}
+
+function readBtns() {
+  //adds an eventlistener to each filterbutton
+  document
+    .querySelectorAll("[data-action='filter']")
+    .forEach((button) => button.addEventListener("click", selectedFilter));
+
+  //looks after changes in the options under #sortingList
+  document.querySelector("#sortingList").onchange = function () {
+    selectedSort(this.value);
+  };
+}
+
+function selectedFilter(event) {
+  //reads witch button is clicked
+  const filter = event.target.dataset.filter;
+  console.log(`Use this ${filter}`);
+  filterList(filter);
+}
+
+function filterList(filterType) {
+  //adds the selected students to filteredList
+  let filteredList = allStudents;
+  if (filterType === "gryffindor") {
+    filteredList = allStudents.filter(isGryffindor);
+  } else if (filterType === "hufflepuff") {
+    filteredList = allStudents.filter(isHufflepuff);
+  } else if (filterType === "ravenclaw") {
+    filteredList = allStudents.filter(isRavenclaw);
+  } else if (filterType === "slytherin") {
+    filteredList = allStudents.filter(isSlytherin);
+  }
+  //TODO: filter on expelled and unexpelled
+
+  console.log(filteredList);
+  showStudentList(filteredList);
+}
+
+function isGryffindor(house) {
+  //rerutns true if a students house is Gryffindor
+  return house.house === "Gryffindor";
+}
+
+function isHufflepuff(house) {
+  //rerutns true if a students house is Hufflepuff
+  return house.house === "Hufflepuff";
+}
+
+function isRavenclaw(house) {
+  //rerutns true if a students house is Ravenclaw
+  return house.house === "Ravenclaw";
+}
+
+function isSlytherin(house) {
+  //rerutns true if a students house is Slytherin
+  return house.house === "Slytherin";
+}
+
+function selectedSort(event) {
+  //checks what option is clicked
+  const sortBy = event;
+  console.log(`Use this ${sortBy}`);
+  sortList(sortBy);
+}
+
+function sortList(sortBy) {
+  //based on what is clicked, calls the matching function
+  let sortedList = allStudents;
+
+  if (sortBy === "firstnamea-z") {
+    sortedList = sortedList.sort(sortByFirstnameAZ);
+  } else if (sortBy === "firstnamez-a") {
+    sortedList = sortedList.sort(sortByFirstnameZA);
+  } else if (sortBy === "lastnamea-z") {
+    sortedList = sortedList.sort(sortByLastnameAZ);
+  } else if (sortBy === "lastnamez-a") {
+    sortedList = sortedList.sort(sortByLastnameZA);
+  } else if (sortBy === "housea-z") {
+    sortedList = sortedList.sort(sortByHouseAZ);
+  } else if (sortBy === "housez-a") {
+    sortedList = sortedList.sort(sortByHouseZA);
+  }
+
+  showStudentList(sortedList);
+}
+
+//sorts by firstname a-z
+function sortByFirstnameAZ(firstnameA, firstnameB) {
+  if (firstnameA.firstname < firstnameB.firstname) {
+    return -1;
+  } else {
+    return 1;
+  }
+}
+
+//sorts by firstname z-a
+function sortByFirstnameZA(firstnameA, firstnameB) {
+  if (firstnameA.firstname < firstnameB.firstname) {
+    return 1;
+  } else {
+    return -1;
+  }
+}
+
+//sorts by lastname a-z
+function sortByLastnameAZ(lastnameA, lastnameB) {
+  if (lastnameA.lastname < lastnameB.lastname) {
+    return -1;
+  } else {
+    return 1;
+  }
+}
+
+//sorts by lastname z-a
+function sortByLastnameZA(lastnameA, lastnameB) {
+  if (lastnameA.lastname < lastnameB.lastname) {
+    return 1;
+  } else {
+    return -1;
+  }
+}
+
+//sorts by house a-z
+function sortByHouseAZ(houseA, houseB) {
+  if (houseA.house < houseB.house) {
+    return -1;
+  } else {
+    return 1;
+  }
+}
+
+//sorts by house z-a
+function sortByHouseZA(houseA, houseB) {
+  if (houseA.house < houseB.house) {
+    return 1;
+  } else {
+    return -1;
+  }
 }
 
 async function fetchStudentData() {
   const respons = await fetch(link);
   json = await respons.json();
-  //addEventListenerToButtons();
   prepareObjects(json);
 }
 
@@ -157,7 +297,6 @@ function showStudentList(students) {
   console.log(students);
   container.innerHTML = "";
   students.forEach((student) => {
-    // if (filter == "alle" || filter == mad.gsx$kategori.$t) {
     const klon = temp.cloneNode(true).content;
     if (student.lastname == null) {
       klon.querySelector(".fullname").textContent = student.firstname;
@@ -173,7 +312,6 @@ function showStudentList(students) {
       .addEventListener("click", () => openSingleStudent(student));
 
     container.appendChild(klon);
-    //}
   });
 }
 
@@ -204,9 +342,7 @@ function openSingleStudent(student) {
   //popup.querySelector(".house_crest").src = ;
   if (student.photo != null) {
     popup.querySelector("img").src = "images/" + student.photo;
-  } /* else {
-    popup.querySelector("img").src = null;
-  } */
+  }
 
   document
     .querySelector("#close")

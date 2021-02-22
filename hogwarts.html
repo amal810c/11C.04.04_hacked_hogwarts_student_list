@@ -15,6 +15,38 @@
   <body>
     <h1>Hogwarts - Class og 1991</h1>
 
+    <select name="sortingList" id="sortingList">
+      <option>Sorting</option>
+      <option value="firstnamea-z">Firstname A-Z</option>
+      <option value="firstnamez-a">Firstname Z-A</option>
+      <option value="lastnamea-z">Lastname A-Z</option>
+      <option value="lastnamez-a">Lastname Z-A</option>
+      <option value="housea-z">House A-Z</option>
+      <option value="housez-a">House Z-A</option>
+    </select>
+
+    <div id="filterbtns">
+      <button class="filter" data-action="filter" data-filter="all">All</button>
+      <button class="filter" data-action="filter" data-filter="gryffindor">
+        Gryffindor
+      </button>
+      <button class="filter" data-action="filter" data-filter="hufflepuff">
+        Hufflepuff
+      </button>
+      <button class="filter" data-action="filter" data-filter="ravenclaw">
+        Ravenclaw
+      </button>
+      <button class="filter" data-action="filter" data-filter="slytherin">
+        Slytherin
+      </button>
+      <button class="filter" data-action="filter" data-filter="unexpelled">
+        Not expelled
+      </button>
+      <button class="filter" data-action="filter" data-filter="expelled">
+        Expelled
+      </button>
+    </div>
+
     <section class="container"></section>
 
     <template>
