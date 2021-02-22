@@ -7,6 +7,8 @@ const link = "https://petlatkea.dk/2021/hogwarts/students.json";
 const allStudents = [];
 let temp = document.querySelector("template");
 let container = document.querySelector("section");
+let filterType = "all";
+let sortBy = "sorting";
 
 function initPage() {
   console.log("ready");
@@ -32,25 +34,31 @@ function selectedFilter(event) {
   //reads witch button is clicked
   const filter = event.target.dataset.filter;
   console.log(`Use this ${filter}`);
-  filterList(filter);
+  //filterList(filter);
+  setFilter(filter);
 }
 
-function filterList(filterType) {
+function setFilter(filter) {
+  filterType = filter;
+  buildList();
+}
+
+function filterList(filterredList) {
   //adds the selected students to filteredList
-  let filteredList = allStudents;
+  //let filteredList = allStudents;
   if (filterType === "gryffindor") {
-    filteredList = allStudents.filter(isGryffindor);
+    filterredList = allStudents.filter(isGryffindor);
   } else if (filterType === "hufflepuff") {
-    filteredList = allStudents.filter(isHufflepuff);
+    filterredList = allStudents.filter(isHufflepuff);
   } else if (filterType === "ravenclaw") {
-    filteredList = allStudents.filter(isRavenclaw);
+    filterredList = allStudents.filter(isRavenclaw);
   } else if (filterType === "slytherin") {
-    filteredList = allStudents.filter(isSlytherin);
+    filterredList = allStudents.filter(isSlytherin);
   }
   //TODO: filter on expelled and unexpelled
 
-  console.log(filteredList);
-  showStudentList(filteredList);
+  console.log(filterredList);
+  return filterredList;
 }
 
 function isGryffindor(house) {
@@ -75,14 +83,15 @@ function isSlytherin(house) {
 
 function selectedSort(event) {
   //checks what option is clicked
-  const sortBy = event;
+  sortBy = event;
   console.log(`Use this ${sortBy}`);
-  sortList(sortBy);
+  //sortList(sortBy);
+  buildList();
 }
 
-function sortList(sortBy) {
+function sortList(sortedList) {
   //based on what is clicked, calls the matching function
-  let sortedList = allStudents;
+  //let sortedList = allStudents;
 
   if (sortBy === "firstnamea-z") {
     sortedList = sortedList.sort(sortByFirstnameAZ);
@@ -98,7 +107,7 @@ function sortList(sortBy) {
     sortedList = sortedList.sort(sortByHouseZA);
   }
 
-  showStudentList(sortedList);
+  return sortedList;
 }
 
 //sorts by firstname a-z
@@ -153,6 +162,13 @@ function sortByHouseZA(houseA, houseB) {
   } else {
     return -1;
   }
+}
+
+function buildList() {
+  let currentList = filterList(allStudents);
+  currentList = sortList(currentList);
+
+  showStudentList(currentList);
 }
 
 async function fetchStudentData() {
