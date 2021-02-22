@@ -179,21 +179,34 @@ function showStudentList(students) {
 
 function openSingleStudent(student) {
   popup.style.display = "block";
-  if (student.middlename == null || student.nickname == null) {
-    popup.querySelector("h2").textContent =
-      student.firstname + " " + student.lastname;
+  if (student.middlename == null && student.nickname == null) {
+    if (student.lastname == null) {
+      popup.querySelector("h2").textContent = student.firstname;
+    } else {
+      popup.querySelector("h2").textContent =
+        student.firstname + " " + student.lastname;
+    }
   } else if (student.middlename != null) {
     popup.querySelector("h2").textContent =
       student.firstname + " " + student.middlename + " " + student.lastname;
+  } else if (student.nickname != null) {
+    popup.querySelector("h2").textContent =
+      student.firstname +
+      " " +
+      '"' +
+      student.nickname +
+      '"' +
+      " " +
+      student.lastname;
   }
   //popup.querySelector(".blodstatus").textContent = student.house;
   popup.querySelector(".house").textContent = student.house;
   //popup.querySelector(".house_crest").src = ;
   if (student.photo != null) {
     popup.querySelector("img").src = "images/" + student.photo;
-  } else {
+  } /* else {
     popup.querySelector("img").src = null;
-  }
+  } */
 
   document
     .querySelector("#close")
