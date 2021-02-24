@@ -58,19 +58,26 @@ body {
   display: none;
 }
 
+/* #popupcontent {
+  display: flex;
+  flex-direction: row;
+} */
+
 #popup_student_pic {
-  height: 20%;
+  height: 10%;
   width: auto;
 }
 
 #popup article {
   display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
   width: 50vw;
   height: 50vh;
   margin: 4rem auto;
   background-color: white;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 #close {
@@ -81,4 +88,88 @@ body {
   color: black;
   border-radius: 5px;
   cursor: pointer;
+}
+
+#popupbuttons {
+  position: absolute;
+  align-items: center;
+  top: 42vh;
+  left: 2vw;
+}
+
+/*************************FILTER AND SORT***********************/
+#filterbtns {
+  text-align: center;
+  font-weight: bolder;
+  margin-bottom: 70px;
+}
+select {
+  margin-right: 50px;
+}
+#sortingList {
+  justify-content: center;
+  font-family: "Cinzel Decorative", cursive;
+  font-weight: bolder;
+}
+
+/*************************BUTTONS***********************/
+
+#expellbtn,
+#prefectbtn,
+#isbtn,
+.filter {
+  font-family: "Cinzel Decorative", cursive;
+  font-weight: bolder;
+  cursor: pointer;
+
+  background-image: linear-gradient(
+    to right,
+    #2b5876 0%,
+    #4e4376 51%,
+    #2b5876 100%
+  );
+  margin: 5px;
+  padding: 10px 40px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  border-radius: 10px;
+}
+#expellbtn:hover,
+#prefectbtn:hover,
+#isbtn:hover,
+.filter:hover {
+  background-position: right center; /* change the direction of the change here */
+  color: #fff;
+  text-decoration: none;
+}
+
+.clickedbutton {
+  font-family: "Cinzel Decorative", cursive;
+  font-weight: bolder;
+  cursor: pointer;
+  background-image: linear-gradient(
+    to right,
+    #16a085 0%,
+    #f4d03f 51%,
+    #16a085 100%
+  );
+  margin: 5px;
+  padding: 10px 40px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  border-radius: 10px;
+  display: block;
+}
+
+.clickedbutton:hover {
+  background-position: right center; /* change the direction of the change here */
+  color: #fff;
+  text-decoration: none;
 }

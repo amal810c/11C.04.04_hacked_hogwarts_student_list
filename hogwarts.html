@@ -13,19 +13,19 @@
     />
   </head>
   <body>
-    <h1>Hogwarts - Class og 1991</h1>
-
-    <select name="sortingList" id="sortingList">
-      <option>Sorting</option>
-      <option value="firstnamea-z">Firstname A-Z</option>
-      <option value="firstnamez-a">Firstname Z-A</option>
-      <option value="lastnamea-z">Lastname A-Z</option>
-      <option value="lastnamez-a">Lastname Z-A</option>
-      <option value="housea-z">House A-Z</option>
-      <option value="housez-a">House Z-A</option>
-    </select>
+    <h1>Hogwarts - Class of 1991</h1>
 
     <div id="filterbtns">
+      <select name="sortingList" id="sortingList">
+        <option>Sorting</option>
+        <option value="firstnamea-z">Firstname A-Z</option>
+        <option value="firstnamez-a">Firstname Z-A</option>
+        <option value="lastnamea-z">Lastname A-Z</option>
+        <option value="lastnamez-a">Lastname Z-A</option>
+        <option value="housea-z">House A-Z</option>
+        <option value="housez-a">House Z-A</option>
+      </select>
+      Filter:
       <button class="filter" data-action="filter" data-filter="all">All</button>
       <button class="filter" data-action="filter" data-filter="gryffindor">
         Gryffindor
@@ -59,12 +59,21 @@
     <section id="popup">
       <article>
         <button id="close">X</button>
-        <img id="popup_student_pic" src="" alt="" />
-        <div>
-          <h2></h2>
-          <p>Blod-status: <span class="blodstatus"></span></p>
-          <p>House: <span class="house"></span></p>
-          <img class="house_crest" src="" alt="" />
+        <div id="popupcontent">
+          <div>
+            <h2></h2>
+            <p>Blod-status: <span class="blodstatus"></span></p>
+            <p>House: <span class="house"></span></p>
+            <img class="house_crest" src="" alt="" />
+          </div>
+          <div>
+            <img id="popup_student_pic" src="" alt="" />
+          </div>
+        </div>
+        <div id="popupbuttons">
+          <button id="expellbtn" class="">Expell</button>
+          <button id="prefectbtn" class="">Prefect</button>
+          <button id="isbtn" class="">Inquisitorial Squad</button>
         </div>
       </article>
     </section>
