@@ -53,7 +53,6 @@
       <article id="student_article">
         <img src="" alt="" />
         <h2 class="fullname"></h2>
-        <div id="prefect" class="prefect">🏆</div>
       </article>
     </template>
 
@@ -79,23 +78,25 @@
       </article>
     </section>
 
-    <div id="onlytwowinners" class="dialog">
-      <div class="dialogcontent">
-        <button class="closebutton">close</button>
-        <h1>You can only have two winners!</h1>
-        <h2>Remove one, before you appoint more</h2>
-        <p>
-          <button data-action="remove1">remove</button>
-          <span class="animal1">NAME, the TYPE</span>
-        </p>
-        <p>
-          <button data-action="remove2">remove</button>
-          <span class="animal2">NAME, the TYPE</span>
-        </p>
+    <div id="onlytwoprefects" class="hide">
+      <div class="overlay">
+        <div id="dialogcontent" class="dialogcontent">
+          <button class="closebutton">X</button>
+          <h1 id="warning">You can only have two prefects pr house!</h1>
+          <h2>Remove one to make another one prefect</h2>
+          <p>
+            <button data-action="remove1">remove</button>
+            <span class="prefect1">NAME</span>
+          </p>
+          <p>
+            <button data-action="remove2">remove</button>
+            <span class="prefect2">NAME</span>
+          </p>
+        </div>
       </div>
     </div>
 
-    <div id="onlyonekind" class="dialog">
+    <!--    <div id="onlyonekind" class="dialog">
       <div class="dialogcontent">
         <button class="closebutton">close</button>
         <h1>You can only have one winner of each type</h1>
@@ -105,14 +106,17 @@
           <span class="animal1">NAME, the TYPE</span>
         </p>
       </div>
-    </div>
+    </div> -->
 
     <footer>
+      <div></div>
       Pictures from:
       <a
         href="https://unsplash.com/photos/Bf9PT5qVZvM?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink"
         >Unsplash.com</a
       >
+    </div>
+      <p> © Amalie Grøn 2021</p>
     </footer>
 
     <script src="hogwarts.js"></script>

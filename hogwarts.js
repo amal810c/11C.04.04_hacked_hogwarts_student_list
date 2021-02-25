@@ -358,7 +358,7 @@ function showStudentList(students) {
       klon.querySelector("img").src = "images/" + student.photo;
     }
     klon
-      .querySelector("article img")
+      .querySelector("article")
       .addEventListener("click", () => openSingleStudent(student));
 
     //adding house color to the right students
@@ -373,18 +373,8 @@ function showStudentList(students) {
       klon.querySelector("article").classList.add("Gryffindor");
     }
 
-    //prefect
-
-    klon.querySelector("#prefect").addEventListener("click", togglePrefect);
-
     container.appendChild(klon);
   });
-}
-
-function togglePrefect() {
-  console.log("toggle prefect");
-  document.querySelector("#prefect").classList.remove("prefect");
-  document.querySelector("#prefect").classList.add("prefectshow");
 }
 
 function openSingleStudent(student) {
@@ -394,6 +384,12 @@ function openSingleStudent(student) {
     document.querySelector("#expellbtn").classList.remove("clickedbutton");
   } else {
     document.querySelector("#expellbtn").classList.add("clickedbutton");
+  }
+
+  if (student.prefect != true) {
+    document.querySelector("#prefectbtn").classList.remove("clickedbutton");
+  } else {
+    document.querySelector("#prefectbtn").classList.add("clickedbutton");
   }
 
   //adding house color to the right students
@@ -434,32 +430,26 @@ function openSingleStudent(student) {
     "housecrests/" + student.house + ".png";
   if (student.photo != null) {
     popup.querySelector("#popup_student_pic").src = "images/" + student.photo;
+  } else {
+    popup.querySelector("#popup_student_pic").src = "";
   }
 
   //expell
   document.querySelector("#expellbtn").addEventListener("click", expell);
 
+  document
+    .querySelector("#prefectbtn")
+    .addEventListener("click", togglePrefect);
+
   document.querySelector("#close").addEventListener("click", () => {
     popup.style.display = "none";
     document.querySelector("#expellbtn").removeEventListener("click", () => {});
+    document
+      .querySelector("#prefectbtn")
+      .removeEventListener("click", () => {});
   });
 
   selectedStudent = student;
-
-  // popup
-  //   .querySelector("#prefect")
-  //   .addEventListener("click", togglePrefectBtn(student));
-
-  // function clickPrefect(student) {
-  //   if (student.prefect === true) {
-  //     console.log("remove: " + student.firstname);
-  //     student.prefect = false;
-  //   } else {
-  //     TryToMakeAPrefect(student);
-  //   }
-  //   // document.querySelector("#prefect").addEventListener("click", clickPrefect);
-  //   buildList();
-  // }
 }
 
 function expell() {
@@ -467,8 +457,10 @@ function expell() {
   if (selectedStudent.expelled === false) {
     allStudents.splice(allStudents.indexOf(selectedStudent), 1);
     selectedStudent.expelled = true;
+    selectedStudent.prefect = false;
     expelledStudents.push(selectedStudent);
     document.querySelector("#expellbtn").classList.add("clickedbutton");
+    document.querySelector("#prefectbtn").classList.remove("clickedbutton");
     console.log("expell");
   } else {
     alert("This student is allready expelled!");
@@ -476,6 +468,109 @@ function expell() {
   }
 
   buildList();
+}
+
+function togglePrefect() {
+  console.log("toggle prefect");
+  if (selectedStudent.expelled === false) {
+    const index = allStudents.indexOf(selectedStudent);
+    if (selectedStudent.prefect === false) {
+      housePrefectCheck();
+    } else {
+      removePrefect(selectedStudent);
+    }
+  }
+
+  function housePrefectCheck() {
+    console.log("chekking for house prefects");
+    const houseprefects = [];
+    allStudents.filter((student) => {
+      if (student.house === selectedStudent.house && student.prefect === true) {
+        houseprefects.push(student);
+      }
+    });
+    console.log("prefect house: " + houseprefects.length);
+    const numberOfPrefects = houseprefects.length;
+    /*   const other = [];
+    houseprefects.filter((student) => {
+      if (student.gender === selectedStudent.gender) {
+        other.push(student);
+      }
+    });
+    console.log("other: " + other.length); */
+    //if there is another of the same type
+    if (numberOfPrefects >= 2) {
+      console.log("There can only be two prefects of each house!");
+      removePrefectAorB(houseprefects[0], houseprefects[1]);
+    } else {
+      // allStudents[index].prefect = true;
+      console.log("add prefect");
+      makePrefect(selectedStudent);
+    }
+  }
+  function removePrefectAorB(prefectA, prefectB) {
+    //aske the user to ignore og remove a or b
+    {
+      document.querySelector("#onlytwoprefects").classList.remove("hide");
+      document
+        .querySelector("#onlytwoprefects .closebutton")
+        .addEventListener("click", closeDialog);
+      document
+        .querySelector("#onlytwoprefects [data-action=remove1]")
+        .addEventListener("click", clickRemoveA);
+      document
+        .querySelector("#onlytwoprefects [data-action=remove2]")
+        .addEventListener("click", clickRemoveB);
+    }
+
+    // show names next to buttons
+    document.querySelector("#onlytwoprefects .prefect1").textContent =
+      prefectA.firstname;
+    document.querySelector("#onlytwoprefects .prefect2").textContent =
+      prefectB.firstname;
+
+    //if ignore - do nothing..
+    function closeDialog() {
+      document.querySelector("#onlytwoprefects").classList.add("hide");
+      document
+        .querySelector("#onlytwoprefects .closebutton")
+        .removeEventListener("click", closeDialog);
+      document
+        .querySelector("#onlytwoprefects [data-action=remove1]")
+        .removeEventListener("click", clickRemoveA);
+      document
+        .querySelector("#onlytwoprefects [data-action=remove2]")
+        .removeEventListener("click", clickRemoveB);
+    }
+
+    function clickRemoveA() {
+      //if remove a:
+      removePrefect(prefectA);
+      makePrefect(selectedStudent);
+      buildList();
+      closeDialog();
+    }
+
+    function clickRemoveB() {
+      //else - if remove b:
+      removePrefect(prefectB);
+      makePrefect(selectedStudent);
+      buildList();
+      closeDialog();
+    }
+  }
+
+  function removePrefect(studentPrefect) {
+    document.querySelector("#prefectbtn").classList.remove("clickedbutton");
+    const index = allStudents.indexOf(studentPrefect);
+    allStudents[index].prefect = false;
+  }
+
+  function makePrefect(studentPrefect) {
+    document.querySelector("#prefectbtn").classList.add("clickedbutton");
+    const index = allStudents.indexOf(studentPrefect);
+    allStudents[index].prefect = true;
+  }
 }
 
 // function togglePrefectBtn(student) {

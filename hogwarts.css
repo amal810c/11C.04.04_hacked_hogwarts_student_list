@@ -38,11 +38,11 @@ body {
   padding: 10px;
   border-radius: 15px;
   text-align: center;
+  cursor: pointer;
 }
 
 #student_article img {
   width: 40%;
-  cursor: pointer;
 }
 
 /*************************POPUP***********************/
@@ -180,6 +180,7 @@ select {
   color: white;
   border-radius: 10px;
 }
+
 #expellbtn:hover,
 #prefectbtn:hover,
 #isbtn:hover,
@@ -217,52 +218,87 @@ select {
 
 /*******************TEST**************************/
 
-.dialog {
+.hide {
   display: none;
 }
 
-.dialog.show {
+.overlay {
   position: fixed;
   width: 100vw;
   height: 100vh;
   top: 0;
   left: 0;
+  background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .dialogcontent {
-  background-color: rgb(233, 233, 255);
-  font-family: Arial, Helvetica, sans-serif;
-  padding: 10vw 8vw 8vw 8vw;
-  position: relative;
+  background-image: url(design_pics/annie-spratt-Bf9PT5qVZvM-unsplash.jpg);
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  width: 50vw;
+  height: 50vh;
+  margin: 4rem auto;
+  flex-wrap: nowrap;
 }
 
-.dialog h1 {
-  margin: 0;
-  font-size: 130%;
+#warning {
+  margin: 50px;
+  font-size: 3vw;
+  margin-top: 100px;
+  color: #6d0000;
 }
 
-.dialog h2 {
-  margin: 0.5em 0;
-  font-size: 110%;
-  font-weight: lighter;
-}
-
-.dialog .closebutton {
-  -moz-appearance: none;
-  appearance: none;
-  position: absolute;
-  top: 4vw;
-  right: 4vw;
-  border: none;
-  background-color: transparent;
-  font-size: 90%;
-  color: darkgray;
-}
-
-.dialog .closebutton:hover {
+#dialogcontent h2 {
+  text-align: center;
+  margin-bottom: 20px;
   color: black;
+}
+
+#dialogcontent p {
+  text-align: center;
+  color: black;
+  font-weight: bolder;
+}
+
+#dialogcontent p button {
+  font-family: "Cinzel Decorative", cursive;
+  font-weight: bolder;
+  cursor: pointer;
+
+  background-image: linear-gradient(
+    to right,
+    #2b5876 0%,
+    #4e4376 51%,
+    #2b5876 100%
+  );
+  margin: 5px;
+  padding: 10px 40px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  border-radius: 10px;
+}
+
+.closebutton {
+  position: absolute;
+  top: 3vw;
+  right: 3vw;
+  background-color: white;
+  color: black;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/*******************FOOTER******************/
+footer {
+  margin-top: 50px;
+  color: black;
+  font-weight: bolder;
+  text-align: center;
 }
