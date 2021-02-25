@@ -9,13 +9,28 @@ let temp = document.querySelector("template");
 let container = document.querySelector("section");
 let filterType = "all";
 let sortBy = "sorting";
+const search = document.querySelector(".search");
+search.addEventListener("input", startSearch);
 
 function initPage() {
   console.log("ready");
 
   readBtns();
-
   fetchStudentData();
+}
+
+function startSearch(event) {
+  let searchList = allStudents.filter((student) => {
+    let name = "";
+    if (student.lastname === null) {
+      name = student.firstname;
+    } else {
+      name = student.firstname + " " + student.lastname;
+    }
+    return name.toLowerCase().includes(event.target.value);
+  });
+
+  showStudentList(searchList);
 }
 
 function readBtns() {
@@ -57,7 +72,7 @@ function filterList(filterredList) {
   }
   //TODO: filter on expelled and unexpelled
 
-  console.log(filterredList);
+  // console.log(filterredList);
   return filterredList;
 }
 
@@ -189,6 +204,8 @@ function prepareObjects(jsonData) {
       nickname: "-not set yet-",
       photo: "-not set yet-",
       house: "-not set yet-",
+      gender: "",
+      prefect: false,
     };
     // TODO: MISSING CODE HERE !!!
 
@@ -303,6 +320,10 @@ function prepareObjects(jsonData) {
     //House is already a seperate string so just adds the age to the object
     student.house = house.substring(0, 1).toUpperCase() + house.substring(1);
 
+    //gender
+    student.gender = jsonObject.gender;
+    student.prefect = false;
+
     //Adds all objects (students) into the array
     allStudents.push(student);
   });
@@ -310,7 +331,7 @@ function prepareObjects(jsonData) {
 }
 
 function showStudentList(students) {
-  console.log(students);
+  // console.log(allStudents);
   container.innerHTML = "";
   students.forEach((student) => {
     const klon = temp.cloneNode(true).content;
@@ -324,11 +345,21 @@ function showStudentList(students) {
       klon.querySelector("img").src = "images/" + student.photo;
     }
     klon
-      .querySelector("article")
+      .querySelector("article img")
       .addEventListener("click", () => openSingleStudent(student));
+
+    //prefect
+
+    klon.querySelector("#prefect").addEventListener("click", togglePrefect);
 
     container.appendChild(klon);
   });
+}
+
+function togglePrefect() {
+  console.log("toggle prefect");
+  document.querySelector("#prefect").classList.remove("prefect");
+  document.querySelector("#prefect").classList.add("prefectshow");
 }
 
 function openSingleStudent(student) {
@@ -363,4 +394,290 @@ function openSingleStudent(student) {
   document
     .querySelector("#close")
     .addEventListener("click", () => (popup.style.display = "none"));
+
+  // popup
+  //   .querySelector("#prefect")
+  //   .addEventListener("click", togglePrefectBtn(student));
+
+  // function clickPrefect(student) {
+  //   if (student.prefect === true) {
+  //     console.log("remove: " + student.firstname);
+  //     student.prefect = false;
+  //   } else {
+  //     TryToMakeAPrefect(student);
+  //   }
+  //   // document.querySelector("#prefect").addEventListener("click", clickPrefect);
+  //   buildList();
+  // }
 }
+
+// function togglePrefectBtn(student) {
+//   console.log("toggle Bottun");
+//   document.querySelector("#prefect").classList.add("clickedbutton");
+// }
+
+// function TryToMakeAPrefect(selectedStudent) {
+//   const houseprefects = [];
+//   allStudents.filter((student) => {
+//     if (student.house === selectedStudent.house && student.prefect === true) {
+//       houseprefects.push(student);
+//     }
+//   });
+//   console.log("prefect house: " + houseprefects.length);
+//   const numberOfPrefects = houseprefects.length;
+//   const other = [];
+//   houseprefects.filter((student) => {
+//     if (student.gender === selectedStudent.gender) {
+//       other.push(student);
+//     }
+//   });
+//   console.log("other: " + other.length);
+//   //if there is another of the same type
+//   if (other.length >= 1) {
+//     console.log("There cane by only one winner of each type!");
+//     removeOther(other);
+//   } else if (numberOfPrefects >= 2) {
+//     console.log("There can only be two winners!");
+//     removeAorB(other[0], other[1]);
+//   } else {
+//     makePrefect(selectedStudent);
+//   }
+
+//   function removeOther(other) {
+//     //ask the user to ignore ore remove the other
+//     document.querySelector("#onlyonekind").classList.remove("dialog");
+//     document
+//       .querySelector("#onlyonekind .closebutton")
+//       .addEventListener("click", closeDialog);
+//     document
+//       .querySelector("#onlyonekind [data-action=remove1]")
+//       .addEventListener("click", clickRemoveOther);
+
+//     //add name to button
+//     document.querySelector("#onlyonekind .animal1").textContent =
+//       other.firstname;
+
+//     //if ignore - do nothing..
+//     function closeDialog() {
+//       document.querySelector("#onlyonekind").classList.add("dialog");
+//       document
+//         .querySelector("#onlyonekind .closebutton")
+//         .removeEventListener("click", closeDialog);
+//       document
+//         .querySelector("#onlyonekind [data-action=remove1]")
+//         .removeEventListener("click", clickRemoveOther);
+//     }
+
+//     //if remove other:
+//     function clickRemoveOther() {
+//       removePrefect(other);
+//       makePrefect(selectedStudent);
+//       buildList();
+//       closeDialog();
+//     }
+//   }
+
+//   function removeAorB(prefectA, prefectB) {
+//     //aske the user to ignore og remove a or b
+//     {
+//       document.querySelector("#onlytwowinners").classList.remove("dialog");
+//       document
+//         .querySelector("#onlytwowinners .closebutton")
+//         .addEventListener("click", closeDialog);
+//       document
+//         .querySelector("#onlytwowinners [data-action=remove1]")
+//         .addEventListener("click", clickRemoveA);
+//       document
+//         .querySelector("#onlytwowinners [data-action=remove2]")
+//         .addEventListener("click", clickRemoveB);
+//     }
+
+//     // show names next to buttons
+//     document.querySelector("#onlytwowinners .animal1").textContent =
+//       prefectA.firstname;
+//     document.querySelector("#onlytwowinners .animal2").textContent =
+//       prefectB.firstname;
+
+//     //if ignore - do nothing..
+//     function closeDialog() {
+//       document.querySelector("#onlytwowinners").classList.add("dialog");
+//       document
+//         .querySelector("#onlytwowinners .closebutton")
+//         .removeEventListener("click", closeDialog);
+//       document
+//         .querySelector("#onlytwowinners [data-action=remove1]")
+//         .removeEventListener("click", clickRemoveA);
+//       document
+//         .querySelector("#onlytwowinners [data-action=remove2]")
+//         .removeEventListener("click", clickRemoveB);
+//     }
+
+//     function clickRemoveA() {
+//       //if remove a:
+//       removePrefect(prefectA);
+//       makePrefect(selectedStudent);
+//       buildList();
+//       closeDialog();
+//     }
+
+//     function clickRemoveB() {
+//       //else - if remove b:
+//       removePrefect(prefectB);
+//       makePrefect(selectedStudent);
+//       buildList();
+//       closeDialog();
+//     }
+//   }
+
+//   function removePrefect(prefectStudent) {
+//     prefectStudent.winner = false;
+//   }
+
+//   function makePrefect(student) {
+//     console.log("prefect");
+//     student.prefect = true;
+//   }
+// }
+
+//prefects
+/*   document.querySelector("#prefectbtn").addEventListener("click", clickPrefect);
+  function clickPrefect() {
+    if (student.prefect === true) {
+      console.log(student.firstname);
+      // student.prefect = false;
+    } else {
+      TryToMakeAWinner(student);
+    }
+
+    buildList();
+  } */
+
+/* function TryToMakeAWinner(selectedStudent) {
+  let prefects = [];
+  allStudents.filter((student) => {
+    if (student.house === selectedStudent.house && student.prefect === true) {
+      prefects.push(student);
+    }
+  });
+
+  console.log(prefects.length);
+  const numberOfPrefects = prefects.length;
+  let other = [];
+  prefects.filter((student) => {
+    if (student.gender === selectedStudent.gender) {
+      other.push(student);
+    }
+  });
+  // console.log(other.length);
+
+  //if there is another of the same type
+  if (other.length >= 1) {
+    console.log("There cane by only one prefect of each gender!");
+    removeOther(other);
+  } else if (numberOfPrefects >= 2) {
+    console.log("There can only be two prefects per house!");
+    removeAorB(prefects[0], prefects[1]);
+  } else {
+    makePrefect(selectedStudent);
+  }
+
+  function removeOther(other) {
+    //ask the user to ignore ore remove the other
+    document.querySelector("#onlyonekind").classList.remove("dialog");
+    document
+      .querySelector("#onlyonekind .closebutton")
+      .addEventListener("click", closeDialog);
+    document
+      .querySelector("#onlyonekind [data-action=remove1]")
+      .addEventListener("click", clickRemoveOther);
+
+    //add name to button
+    document.querySelector("#onlyonekind .animal1").textContent = other.name;
+
+    //if ignore - do nothing..
+    function closeDialog() {
+      document.querySelector("#onlyonekind").classList.add("dialog");
+      document
+        .querySelector("#onlyonekind .closebutton")
+        .removeEventListener("click", closeDialog);
+      document
+        .querySelector("#onlyonekind [data-action=remove1]")
+        .removeEventListener("click", clickRemoveOther);
+    }
+
+    //if remove other:
+    function clickRemoveOther() {
+      removePrefect(other);
+      makeWinner(selectedStudent);
+      buildList();
+      closeDialog();
+    }
+  }
+
+  function removeAorB(prefectA, prefectB) {
+    //aske the user to ignore og remove a or b
+    {
+      document.querySelector("#onlytwowinners").classList.remove("dialog");
+      document
+        .querySelector("#onlytwowinners .closebutton")
+        .addEventListener("click", closeDialog);
+      document
+        .querySelector("#onlytwowinners [data-action=remove1]")
+        .addEventListener("click", clickRemoveA);
+      document
+        .querySelector("#onlytwowinners [data-action=remove2]")
+        .addEventListener("click", clickRemoveB);
+    }
+
+    // show names next to buttons
+    document.querySelector("#onlytwowinners .animal1").textContent =
+      prefectA.name;
+    document.querySelector("#onlytwowinners .animal2").textContent =
+      prefectB.name;
+
+    //if ignore - do nothing..
+    function closeDialog() {
+      document.querySelector("#onlytwowinners").classList.add("dialog");
+      document
+        .querySelector("#onlytwowinners .closebutton")
+        .removeEventListener("click", closeDialog);
+      document
+        .querySelector("#onlytwowinners [data-action=remove1]")
+        .removeEventListener("click", clickRemoveA);
+      document
+        .querySelector("#onlytwowinners [data-action=remove2]")
+        .removeEventListener("click", clickRemoveB);
+    }
+
+    function clickRemoveA() {
+      //if remove a:
+      removePrefect(prefectA);
+      makePrefect(selectedStudent);
+      buildList();
+      closeDialog();
+    }
+
+    function clickRemoveB() {
+      //else - if remove b:
+      removePrefect(prefectB);
+      makePrefect(selectedStudent);
+      buildList();
+      closeDialog();
+    }
+  }
+
+  function removePrefect(prefectStudent) {
+    prefectStudent.prefect = false;
+    console.log("ujhklæ");
+
+    document.querySelector("#prefectbtn").classList.remove("clickedbutton");
+    document.querySelector("#prefectbtn").classList.add("prefectbtn");
+  }
+
+  function makePrefect(student) {
+    student.prefect = true;
+    document.querySelector("#prefectbtn").classList.remove("prefectbtn");
+    document.querySelector("#prefectbtn").classList.add("clickedbutton");
+  }
+}
+ */
