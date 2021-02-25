@@ -97,11 +97,11 @@ body {
   left: 2vw;
 }
 
-/*************************FILTER AND SORT***********************/
+/*************************FILTER, SORT, SEARCH AND NUMBER OF STUDENTS***********************/
 #filterbtns {
   text-align: center;
   font-weight: bolder;
-  margin-bottom: 70px;
+  margin-bottom: 20px;
 }
 select {
   margin-right: 30px;
@@ -119,6 +119,11 @@ select {
   margin-left: 30px;
 }
 
+#showedStudents {
+  text-align: center;
+  font-weight: bolder;
+  margin-bottom: 50px;
+}
 /*************************BUTTONS***********************/
 .prefect {
   content: "🏆";

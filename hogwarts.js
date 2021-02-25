@@ -10,7 +10,7 @@ let container = document.querySelector("section");
 let filterType = "all";
 let sortBy = "sorting";
 const search = document.querySelector(".search");
-search.addEventListener("input", startSearch);
+search.addEventListener("input", searchStudent);
 
 function initPage() {
   console.log("ready");
@@ -19,15 +19,15 @@ function initPage() {
   fetchStudentData();
 }
 
-function startSearch(event) {
+function searchStudent(event) {
   let searchList = allStudents.filter((student) => {
-    let name = "";
+    let searchname = "";
     if (student.lastname === null) {
-      name = student.firstname;
+      searchname = student.firstname;
     } else {
-      name = student.firstname + " " + student.lastname;
+      searchname = student.firstname + " " + student.lastname;
     }
-    return name.toLowerCase().includes(event.target.value);
+    return searchname.toLowerCase().includes(event.target.value);
   });
 
   showStudentList(searchList);
@@ -331,7 +331,15 @@ function prepareObjects(jsonData) {
 }
 
 function showStudentList(students) {
-  // console.log(allStudents);
+  //showing the number of students showed on the list
+  if (students.length === 1) {
+    document.querySelector("#showedStudents").textContent =
+      "Now showing " + students.length + " students";
+  } else {
+    document.querySelector("#showedStudents").textContent =
+      "Now showing " + students.length + " students";
+  }
+  //template clone for each student in the list
   container.innerHTML = "";
   students.forEach((student) => {
     const klon = temp.cloneNode(true).content;
