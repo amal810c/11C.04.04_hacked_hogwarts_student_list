@@ -479,6 +479,8 @@ function togglePrefect() {
     } else {
       removePrefect(selectedStudent);
     }
+  } else {
+    alert("This student is expelled! An expelled student can't be a Prefect!");
   }
 
   function housePrefectCheck() {
@@ -491,72 +493,23 @@ function togglePrefect() {
     });
     console.log("prefect house: " + houseprefects.length);
     const numberOfPrefects = houseprefects.length;
-    /*   const other = [];
+    const other = [];
     houseprefects.filter((student) => {
       if (student.gender === selectedStudent.gender) {
         other.push(student);
       }
     });
-    console.log("other: " + other.length); */
+    console.log("other: " + other.length);
     //if there is another of the same type
-    if (numberOfPrefects >= 2) {
+    if (other.length >= 1) {
+      removeOther(other[0]);
+    } else if (numberOfPrefects >= 2) {
       console.log("There can only be two prefects of each house!");
       removePrefectAorB(houseprefects[0], houseprefects[1]);
     } else {
       // allStudents[index].prefect = true;
       console.log("add prefect");
       makePrefect(selectedStudent);
-    }
-  }
-  function removePrefectAorB(prefectA, prefectB) {
-    //aske the user to ignore og remove a or b
-    {
-      document.querySelector("#onlytwoprefects").classList.remove("hide");
-      document
-        .querySelector("#onlytwoprefects .closebutton")
-        .addEventListener("click", closeDialog);
-      document
-        .querySelector("#onlytwoprefects [data-action=remove1]")
-        .addEventListener("click", clickRemoveA);
-      document
-        .querySelector("#onlytwoprefects [data-action=remove2]")
-        .addEventListener("click", clickRemoveB);
-    }
-
-    // show names next to buttons
-    document.querySelector("#onlytwoprefects .prefect1").textContent =
-      prefectA.firstname;
-    document.querySelector("#onlytwoprefects .prefect2").textContent =
-      prefectB.firstname;
-
-    //if ignore - do nothing..
-    function closeDialog() {
-      document.querySelector("#onlytwoprefects").classList.add("hide");
-      document
-        .querySelector("#onlytwoprefects .closebutton")
-        .removeEventListener("click", closeDialog);
-      document
-        .querySelector("#onlytwoprefects [data-action=remove1]")
-        .removeEventListener("click", clickRemoveA);
-      document
-        .querySelector("#onlytwoprefects [data-action=remove2]")
-        .removeEventListener("click", clickRemoveB);
-    }
-
-    function clickRemoveA() {
-      //if remove a:
-      removePrefect(prefectA);
-      makePrefect(selectedStudent);
-      buildList();
-      closeDialog();
-    }
-
-    function clickRemoveB() {
-      //else - if remove b:
-      removePrefect(prefectB);
-      makePrefect(selectedStudent);
-      buildList();
-      closeDialog();
     }
   }
 
@@ -571,275 +524,38 @@ function togglePrefect() {
     const index = allStudents.indexOf(studentPrefect);
     allStudents[index].prefect = true;
   }
-}
-
-// function togglePrefectBtn(student) {
-//   console.log("toggle Bottun");
-//   document.querySelector("#prefect").classList.add("clickedbutton");
-// }
-
-// function TryToMakeAPrefect(selectedStudent) {
-//   const houseprefects = [];
-//   allStudents.filter((student) => {
-//     if (student.house === selectedStudent.house && student.prefect === true) {
-//       houseprefects.push(student);
-//     }
-//   });
-//   console.log("prefect house: " + houseprefects.length);
-//   const numberOfPrefects = houseprefects.length;
-//   const other = [];
-//   houseprefects.filter((student) => {
-//     if (student.gender === selectedStudent.gender) {
-//       other.push(student);
-//     }
-//   });
-//   console.log("other: " + other.length);
-//   //if there is another of the same type
-//   if (other.length >= 1) {
-//     console.log("There cane by only one winner of each type!");
-//     removeOther(other);
-//   } else if (numberOfPrefects >= 2) {
-//     console.log("There can only be two winners!");
-//     removeAorB(other[0], other[1]);
-//   } else {
-//     makePrefect(selectedStudent);
-//   }
-
-//   function removeOther(other) {
-//     //ask the user to ignore ore remove the other
-//     document.querySelector("#onlyonekind").classList.remove("dialog");
-//     document
-//       .querySelector("#onlyonekind .closebutton")
-//       .addEventListener("click", closeDialog);
-//     document
-//       .querySelector("#onlyonekind [data-action=remove1]")
-//       .addEventListener("click", clickRemoveOther);
-
-//     //add name to button
-//     document.querySelector("#onlyonekind .animal1").textContent =
-//       other.firstname;
-
-//     //if ignore - do nothing..
-//     function closeDialog() {
-//       document.querySelector("#onlyonekind").classList.add("dialog");
-//       document
-//         .querySelector("#onlyonekind .closebutton")
-//         .removeEventListener("click", closeDialog);
-//       document
-//         .querySelector("#onlyonekind [data-action=remove1]")
-//         .removeEventListener("click", clickRemoveOther);
-//     }
-
-//     //if remove other:
-//     function clickRemoveOther() {
-//       removePrefect(other);
-//       makePrefect(selectedStudent);
-//       buildList();
-//       closeDialog();
-//     }
-//   }
-
-//   function removeAorB(prefectA, prefectB) {
-//     //aske the user to ignore og remove a or b
-//     {
-//       document.querySelector("#onlytwowinners").classList.remove("dialog");
-//       document
-//         .querySelector("#onlytwowinners .closebutton")
-//         .addEventListener("click", closeDialog);
-//       document
-//         .querySelector("#onlytwowinners [data-action=remove1]")
-//         .addEventListener("click", clickRemoveA);
-//       document
-//         .querySelector("#onlytwowinners [data-action=remove2]")
-//         .addEventListener("click", clickRemoveB);
-//     }
-
-//     // show names next to buttons
-//     document.querySelector("#onlytwowinners .animal1").textContent =
-//       prefectA.firstname;
-//     document.querySelector("#onlytwowinners .animal2").textContent =
-//       prefectB.firstname;
-
-//     //if ignore - do nothing..
-//     function closeDialog() {
-//       document.querySelector("#onlytwowinners").classList.add("dialog");
-//       document
-//         .querySelector("#onlytwowinners .closebutton")
-//         .removeEventListener("click", closeDialog);
-//       document
-//         .querySelector("#onlytwowinners [data-action=remove1]")
-//         .removeEventListener("click", clickRemoveA);
-//       document
-//         .querySelector("#onlytwowinners [data-action=remove2]")
-//         .removeEventListener("click", clickRemoveB);
-//     }
-
-//     function clickRemoveA() {
-//       //if remove a:
-//       removePrefect(prefectA);
-//       makePrefect(selectedStudent);
-//       buildList();
-//       closeDialog();
-//     }
-
-//     function clickRemoveB() {
-//       //else - if remove b:
-//       removePrefect(prefectB);
-//       makePrefect(selectedStudent);
-//       buildList();
-//       closeDialog();
-//     }
-//   }
-
-//   function removePrefect(prefectStudent) {
-//     prefectStudent.winner = false;
-//   }
-
-//   function makePrefect(student) {
-//     console.log("prefect");
-//     student.prefect = true;
-//   }
-// }
-
-//prefects
-/*   document.querySelector("#prefectbtn").addEventListener("click", clickPrefect);
-  function clickPrefect() {
-    if (student.prefect === true) {
-      console.log(student.firstname);
-      // student.prefect = false;
-    } else {
-      TryToMakeAWinner(student);
-    }
-
-    buildList();
-  } */
-
-/* function TryToMakeAWinner(selectedStudent) {
-  let prefects = [];
-  allStudents.filter((student) => {
-    if (student.house === selectedStudent.house && student.prefect === true) {
-      prefects.push(student);
-    }
-  });
-
-  console.log(prefects.length);
-  const numberOfPrefects = prefects.length;
-  let other = [];
-  prefects.filter((student) => {
-    if (student.gender === selectedStudent.gender) {
-      other.push(student);
-    }
-  });
-  // console.log(other.length);
-
-  //if there is another of the same type
-  if (other.length >= 1) {
-    console.log("There cane by only one prefect of each gender!");
-    removeOther(other);
-  } else if (numberOfPrefects >= 2) {
-    console.log("There can only be two prefects per house!");
-    removeAorB(prefects[0], prefects[1]);
-  } else {
-    makePrefect(selectedStudent);
-  }
 
   function removeOther(other) {
     //ask the user to ignore ore remove the other
-    document.querySelector("#onlyonekind").classList.remove("dialog");
+    document.querySelector("#onlytwoprefects").classList.remove("hide");
     document
-      .querySelector("#onlyonekind .closebutton")
+      .querySelector("#onlytwoprefects .closebutton")
       .addEventListener("click", closeDialog);
     document
-      .querySelector("#onlyonekind [data-action=remove1]")
+      .querySelector("#onlytwoprefects [data-action=remove1]")
       .addEventListener("click", clickRemoveOther);
 
     //add name to button
-    document.querySelector("#onlyonekind .animal1").textContent = other.name;
+    document.querySelector("#onlytwoprefects .prefect1").textContent =
+      other.firstname;
 
     //if ignore - do nothing..
     function closeDialog() {
-      document.querySelector("#onlyonekind").classList.add("dialog");
+      document.querySelector("#onlytwoprefects").classList.add("hide");
       document
-        .querySelector("#onlyonekind .closebutton")
+        .querySelector("#onlytwoprefects .closebutton")
         .removeEventListener("click", closeDialog);
       document
-        .querySelector("#onlyonekind [data-action=remove1]")
+        .querySelector("#onlytwoprefects [data-action=remove1]")
         .removeEventListener("click", clickRemoveOther);
     }
 
     //if remove other:
     function clickRemoveOther() {
       removePrefect(other);
-      makeWinner(selectedStudent);
-      buildList();
-      closeDialog();
-    }
-  }
-
-  function removeAorB(prefectA, prefectB) {
-    //aske the user to ignore og remove a or b
-    {
-      document.querySelector("#onlytwowinners").classList.remove("dialog");
-      document
-        .querySelector("#onlytwowinners .closebutton")
-        .addEventListener("click", closeDialog);
-      document
-        .querySelector("#onlytwowinners [data-action=remove1]")
-        .addEventListener("click", clickRemoveA);
-      document
-        .querySelector("#onlytwowinners [data-action=remove2]")
-        .addEventListener("click", clickRemoveB);
-    }
-
-    // show names next to buttons
-    document.querySelector("#onlytwowinners .animal1").textContent =
-      prefectA.name;
-    document.querySelector("#onlytwowinners .animal2").textContent =
-      prefectB.name;
-
-    //if ignore - do nothing..
-    function closeDialog() {
-      document.querySelector("#onlytwowinners").classList.add("dialog");
-      document
-        .querySelector("#onlytwowinners .closebutton")
-        .removeEventListener("click", closeDialog);
-      document
-        .querySelector("#onlytwowinners [data-action=remove1]")
-        .removeEventListener("click", clickRemoveA);
-      document
-        .querySelector("#onlytwowinners [data-action=remove2]")
-        .removeEventListener("click", clickRemoveB);
-    }
-
-    function clickRemoveA() {
-      //if remove a:
-      removePrefect(prefectA);
       makePrefect(selectedStudent);
       buildList();
       closeDialog();
     }
-
-    function clickRemoveB() {
-      //else - if remove b:
-      removePrefect(prefectB);
-      makePrefect(selectedStudent);
-      buildList();
-      closeDialog();
-    }
-  }
-
-  function removePrefect(prefectStudent) {
-    prefectStudent.prefect = false;
-    console.log("ujhklæ");
-
-    document.querySelector("#prefectbtn").classList.remove("clickedbutton");
-    document.querySelector("#prefectbtn").classList.add("prefectbtn");
-  }
-
-  function makePrefect(student) {
-    student.prefect = true;
-    document.querySelector("#prefectbtn").classList.remove("prefectbtn");
-    document.querySelector("#prefectbtn").classList.add("clickedbutton");
   }
 }
- */
