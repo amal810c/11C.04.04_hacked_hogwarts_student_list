@@ -356,6 +356,18 @@ function showStudentList(students) {
       .querySelector("article img")
       .addEventListener("click", () => openSingleStudent(student));
 
+    //adding house color to the right students
+    klon.querySelector("article").classList = "";
+    if (student.house === "Slytherin") {
+      klon.querySelector("article").classList.add("Slytherin");
+    } else if (student.house === "Ravenclaw") {
+      klon.querySelector("article").classList.add("Ravenclaw");
+    } else if (student.house === "Hufflepuff") {
+      klon.querySelector("article").classList.add("Hufflepuff");
+    } else if (student.house === "Gryffindor") {
+      klon.querySelector("article").classList.add("Gryffindor");
+    }
+
     //prefect
 
     klon.querySelector("#prefect").addEventListener("click", togglePrefect);
@@ -372,6 +384,19 @@ function togglePrefect() {
 
 function openSingleStudent(student) {
   popup.style.display = "block";
+
+  //adding house color to the right students
+  popup.querySelector("article").classList = "";
+  if (student.house === "Slytherin") {
+    popup.querySelector("article").classList.add("Slytherin");
+  } else if (student.house === "Ravenclaw") {
+    popup.querySelector("article").classList.add("Ravenclaw");
+  } else if (student.house === "Hufflepuff") {
+    popup.querySelector("article").classList.add("Hufflepuff");
+  } else if (student.house === "Gryffindor") {
+    popup.querySelector("article").classList.add("Gryffindor");
+  }
+
   if (student.middlename == null && student.nickname == null) {
     if (student.lastname == null) {
       popup.querySelector("h2").textContent = student.firstname;
@@ -394,9 +419,10 @@ function openSingleStudent(student) {
   }
   //popup.querySelector(".blodstatus").textContent = student.house;
   popup.querySelector(".house").textContent = student.house;
-  //popup.querySelector(".house_crest").src = ;
+  popup.querySelector("#house_crest").src =
+    "housecrests/" + student.house + ".png";
   if (student.photo != null) {
-    popup.querySelector("img").src = "images/" + student.photo;
+    popup.querySelector("#popup_student_pic").src = "images/" + student.photo;
   }
 
   document
