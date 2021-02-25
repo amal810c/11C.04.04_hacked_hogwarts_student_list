@@ -5,6 +5,8 @@ window.addEventListener("DOMContentLoaded", initPage);
 let json;
 const link = "https://petlatkea.dk/2021/hogwarts/students.json";
 const allStudents = [];
+let expelledStudents = [];
+let selectedStudent;
 let temp = document.querySelector("template");
 let container = document.querySelector("section");
 let filterType = "all";
@@ -69,6 +71,8 @@ function filterList(filterredList) {
     filterredList = allStudents.filter(isRavenclaw);
   } else if (filterType === "slytherin") {
     filterredList = allStudents.filter(isSlytherin);
+  } else if (filterType === "expelled") {
+    filterredList = expelledStudents;
   }
   //TODO: filter on expelled and unexpelled
 
@@ -206,6 +210,7 @@ function prepareObjects(jsonData) {
       house: "-not set yet-",
       gender: "",
       prefect: false,
+      expelled: false,
     };
     // TODO: MISSING CODE HERE !!!
 
@@ -385,6 +390,12 @@ function togglePrefect() {
 function openSingleStudent(student) {
   popup.style.display = "block";
 
+  if (student.expelled != true) {
+    document.querySelector("#expellbtn").classList.remove("clickedbutton");
+  } else {
+    document.querySelector("#expellbtn").classList.add("clickedbutton");
+  }
+
   //adding house color to the right students
   popup.querySelector("article").classList = "";
   if (student.house === "Slytherin") {
@@ -425,9 +436,15 @@ function openSingleStudent(student) {
     popup.querySelector("#popup_student_pic").src = "images/" + student.photo;
   }
 
-  document
-    .querySelector("#close")
-    .addEventListener("click", () => (popup.style.display = "none"));
+  //expell
+  document.querySelector("#expellbtn").addEventListener("click", expell);
+
+  document.querySelector("#close").addEventListener("click", () => {
+    popup.style.display = "none";
+    document.querySelector("#expellbtn").removeEventListener("click", () => {});
+  });
+
+  selectedStudent = student;
 
   // popup
   //   .querySelector("#prefect")
@@ -443,6 +460,22 @@ function openSingleStudent(student) {
   //   // document.querySelector("#prefect").addEventListener("click", clickPrefect);
   //   buildList();
   // }
+}
+
+function expell() {
+  //removes expelled student form allStudents list
+  if (selectedStudent.expelled === false) {
+    allStudents.splice(allStudents.indexOf(selectedStudent), 1);
+    selectedStudent.expelled = true;
+    expelledStudents.push(selectedStudent);
+    document.querySelector("#expellbtn").classList.add("clickedbutton");
+    console.log("expell");
+  } else {
+    alert("This student is allready expelled!");
+    console.log("This student is allready expelled");
+  }
+
+  buildList();
 }
 
 // function togglePrefectBtn(student) {
