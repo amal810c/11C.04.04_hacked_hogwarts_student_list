@@ -8,11 +8,17 @@ img {
 }
 
 /***********GENEREL***********/
-h1 {
-  text-align: center;
+#headline {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
   font-size: 4em;
   margin-bottom: 100px;
   color: black;
+}
+
+#hack {
+  cursor: pointer;
 }
 
 body {

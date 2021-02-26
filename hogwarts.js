@@ -34,8 +34,9 @@ const studentTemplate = {
 function initPage() {
   console.log("ready");
 
+  document.querySelector("#hack").addEventListener("click", hackTheSystem);
+
   readBtns();
-  // fetchBloodstatusData();
   fetchStudentData();
 }
 
@@ -216,11 +217,6 @@ async function fetchStudentData() {
   prepareObjects(json);
 }
 
-async function fetchBloodstatusData() {
-  const respons = await fetch(bloodstatuslink);
-  bloodstatus = await respons.json();
-}
-
 function prepareObjects(jsonData) {
   jsonData.forEach((jsonObject) => {
     const fullname = jsonObject.fullname.trim();
@@ -294,9 +290,6 @@ function prepareObjects(jsonData) {
 
       student.middlename = middlename;
       student.nickname = nickname;
-
-      //console.log(middlename);
-      //console.log(nickname);
     } else {
       student.lastname = null;
       student.middlename = null;
@@ -491,9 +484,11 @@ function expell() {
       allStudents.splice(allStudents.indexOf(selectedStudent), 1);
       selectedStudent.expelled = true;
       selectedStudent.prefect = false;
+      selectedStudent.squad = false;
       expelledStudents.push(selectedStudent);
       document.querySelector("#expellbtn").classList.add("clickedbutton");
       document.querySelector("#prefectbtn").classList.remove("clickedbutton");
+      document.querySelector("#isbtn").classList.remove("clickedbutton");
       console.log("expell");
     } else {
       alert("This student is allready expelled!");
@@ -541,9 +536,6 @@ function togglePrefect() {
     //if there is another of the same type
     if (other.length >= 1) {
       removeOther(other[0]);
-    } else if (numberOfPrefects >= 2) {
-      console.log("There can only be two prefects of each house!");
-      removePrefectAorB(houseprefects[0], houseprefects[1]);
     } else {
       // allStudents[index].prefect = true;
       console.log("add prefect");
@@ -661,25 +653,23 @@ function hackTheSystem() {
     thisIsMe.photo = "me.png";
     thisIsMe.house = "Hufflepuff";
     thisIsMe.gender = "girl";
-    thisIsMe.prefect = true;
+    thisIsMe.prefect = false;
     thisIsMe.expelled = false;
     thisIsMe.bloodstatus = "Pure-blood";
     thisIsMe.squad = false;
-
+    messWithBloodstatus();
     allStudents.unshift(thisIsMe);
 
     //fuck up blood-status
     systemIsHacked = true;
 
-    messWithBloodstatus();
-
     buildList();
+    setTimeout(function () {
+      alert("The Dark Lord is back, you have been hacked!!! ☠ ☠ ☠");
+    }, 100);
   } else {
     alert("Wuups.. System's allready been hacked!");
   }
-  setTimeout(function () {
-    alert("The Dark Lord is back, you have been hacked!!! ☠ ☠ ☠");
-  }, 100);
 }
 
 function messWithBloodstatus() {
