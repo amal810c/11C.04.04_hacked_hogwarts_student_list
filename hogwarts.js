@@ -3,7 +3,9 @@
 window.addEventListener("DOMContentLoaded", initPage);
 
 let json;
+let bloodstatus;
 const link = "https://petlatkea.dk/2021/hogwarts/students.json";
+const bloodstatuslink = "https://petlatkea.dk/2021/hogwarts/families.json";
 const allStudents = [];
 let expelledStudents = [];
 let selectedStudent;
@@ -18,6 +20,7 @@ function initPage() {
   console.log("ready");
 
   readBtns();
+  // fetchBloodstatusData();
   fetchStudentData();
 }
 
@@ -193,7 +196,14 @@ function buildList() {
 async function fetchStudentData() {
   const respons = await fetch(link);
   json = await respons.json();
+  const respons1 = await fetch(bloodstatuslink);
+  bloodstatus = await respons1.json();
   prepareObjects(json);
+}
+
+async function fetchBloodstatusData() {
+  const respons = await fetch(bloodstatuslink);
+  bloodstatus = await respons.json();
 }
 
 function prepareObjects(jsonData) {
@@ -211,6 +221,8 @@ function prepareObjects(jsonData) {
       gender: "",
       prefect: false,
       expelled: false,
+      bloodstatus: "",
+      squad: false,
     };
     // TODO: MISSING CODE HERE !!!
 
@@ -329,10 +341,24 @@ function prepareObjects(jsonData) {
     student.gender = jsonObject.gender;
     student.prefect = false;
 
+    //bloodstatus
+
+    student.bloodstatus = matchBloodstatusWithStudentName(student);
+
     //Adds all objects (students) into the array
     allStudents.push(student);
   });
   showStudentList(allStudents);
+}
+
+function matchBloodstatusWithStudentName(student) {
+  if (bloodstatus.half.indexOf(student.lastname) != -1) {
+    return "Half-blood";
+  } else if (bloodstatus.pure.indexOf(student.lastname) != -1) {
+    return "Pure-blood";
+  } else {
+    return "Muggle-born";
+  }
 }
 
 function showStudentList(students) {
@@ -392,6 +418,12 @@ function openSingleStudent(student) {
     document.querySelector("#prefectbtn").classList.add("clickedbutton");
   }
 
+  if (student.squad != true) {
+    document.querySelector("#isbtn").classList.remove("clickedbutton");
+  } else {
+    document.querySelector("#isbtn").classList.add("clickedbutton");
+  }
+
   //adding house color to the right students
   popup.querySelector("article").classList = "";
   if (student.house === "Slytherin") {
@@ -424,7 +456,7 @@ function openSingleStudent(student) {
       " " +
       student.lastname;
   }
-  //popup.querySelector(".blodstatus").textContent = student.house;
+  popup.querySelector(".blodstatus").textContent = student.bloodstatus;
   popup.querySelector(".house").textContent = student.house;
   popup.querySelector("#house_crest").src =
     "housecrests/" + student.house + ".png";
@@ -434,12 +466,14 @@ function openSingleStudent(student) {
     popup.querySelector("#popup_student_pic").src = "";
   }
 
-  //expell
+  //expell, prefect and squad
   document.querySelector("#expellbtn").addEventListener("click", expell);
 
   document
     .querySelector("#prefectbtn")
     .addEventListener("click", togglePrefect);
+
+  document.querySelector("#isbtn").addEventListener("click", toggleSquad);
 
   document.querySelector("#close").addEventListener("click", () => {
     popup.style.display = "none";
@@ -447,6 +481,7 @@ function openSingleStudent(student) {
     document
       .querySelector("#prefectbtn")
       .removeEventListener("click", () => {});
+    document.querySelector("#isbtn").removeEventListener("click", () => {});
   });
 
   selectedStudent = student;
@@ -480,7 +515,7 @@ function togglePrefect() {
       removePrefect(selectedStudent);
     }
   } else {
-    alert("This student is expelled! An expelled student can't be a Prefect!");
+    alert("This student is expelled! An expelled students can't be a Prefect!");
   }
 
   function housePrefectCheck() {
@@ -557,5 +592,45 @@ function togglePrefect() {
       buildList();
       closeDialog();
     }
+  }
+}
+
+function toggleSquad() {
+  console.log("toggle squad");
+  const index = allStudents.indexOf(selectedStudent);
+  if (selectedStudent.expelled === false) {
+    if (selectedStudent.squad === false) {
+      houseSquadCheck();
+    } else {
+      removeSquad();
+    }
+  } else {
+    alert(
+      "This student is expelled! An expelled students can't be a part of the Inquisitorial Squad!"
+    );
+  }
+
+  function houseSquadCheck() {
+    console.log("chekking for house squads");
+    if (
+      selectedStudent.bloodstatus === "Pure-blood" &&
+      selectedStudent.house === "Slytherin"
+    ) {
+      makeSquad();
+    } else {
+      alert(
+        "Only pure-blooded students from Slytherin can join the Inquisitorial Squad!"
+      );
+    }
+  }
+
+  function makeSquad() {
+    allStudents[index].squad = true;
+    document.querySelector("#isbtn").classList.add("clickedbutton");
+  }
+
+  function removeSquad() {
+    document.querySelector("#isbtn").classList.remove("clickedbutton");
+    allStudents[index].squad = false;
   }
 }
