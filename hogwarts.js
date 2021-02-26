@@ -15,6 +15,21 @@ let filterType = "all";
 let sortBy = "sorting";
 const search = document.querySelector(".search");
 search.addEventListener("input", searchStudent);
+let systemIsHacked = false;
+
+const studentTemplate = {
+  firstname: "-not set yet-",
+  lastname: "-not set yet-",
+  middlename: "-not set yet-",
+  nickname: "-not set yet-",
+  photo: "-not set yet-",
+  house: "-not set yet-",
+  gender: "",
+  prefect: false,
+  expelled: false,
+  bloodstatus: "",
+  squad: false,
+};
 
 function initPage() {
   console.log("ready");
@@ -208,24 +223,6 @@ async function fetchBloodstatusData() {
 
 function prepareObjects(jsonData) {
   jsonData.forEach((jsonObject) => {
-    // TODO: Create new object with cleaned data - and store that in the allAnimals array
-
-    //Create new object
-    const studentTemplate = {
-      firstname: "-not set yet-",
-      lastname: "-not set yet-",
-      middlename: "-not set yet-",
-      nickname: "-not set yet-",
-      photo: "-not set yet-",
-      house: "-not set yet-",
-      gender: "",
-      prefect: false,
-      expelled: false,
-      bloodstatus: "",
-      squad: false,
-    };
-    // TODO: MISSING CODE HERE !!!
-
     const fullname = jsonObject.fullname.trim();
 
     //Split "fullname" into smaller parts after each space. So we get name, type, description and age
@@ -488,18 +485,24 @@ function openSingleStudent(student) {
 }
 
 function expell() {
-  //removes expelled student form allStudents list
-  if (selectedStudent.expelled === false) {
-    allStudents.splice(allStudents.indexOf(selectedStudent), 1);
-    selectedStudent.expelled = true;
-    selectedStudent.prefect = false;
-    expelledStudents.push(selectedStudent);
-    document.querySelector("#expellbtn").classList.add("clickedbutton");
-    document.querySelector("#prefectbtn").classList.remove("clickedbutton");
-    console.log("expell");
+  if (selectedStudent.lastname != "Grøn") {
+    //removes expelled student form allStudents list
+    if (selectedStudent.expelled === false) {
+      allStudents.splice(allStudents.indexOf(selectedStudent), 1);
+      selectedStudent.expelled = true;
+      selectedStudent.prefect = false;
+      expelledStudents.push(selectedStudent);
+      document.querySelector("#expellbtn").classList.add("clickedbutton");
+      document.querySelector("#prefectbtn").classList.remove("clickedbutton");
+      console.log("expell");
+    } else {
+      alert("This student is allready expelled!");
+      console.log("This student is allready expelled");
+    }
   } else {
-    alert("This student is allready expelled!");
-    console.log("This student is allready expelled");
+    alert(
+      `Sorry bro! Can't expell ${selectedStudent.firstname} "${selectedStudent.nickname}" ${selectedStudent.lastname}! 😝`
+    );
   }
 
   buildList();
@@ -619,18 +622,81 @@ function toggleSquad() {
       makeSquad();
     } else {
       alert(
-        "Only pure-blooded students from Slytherin can join the Inquisitorial Squad!"
+        "Only pure-blooded students from Slytherin can join the Inquisitorial Squad! 🐍"
       );
     }
   }
 
   function makeSquad() {
+    if (systemIsHacked === true) {
+      setTimeout(function () {
+        toggleSquad();
+      }, 1000);
+    }
     allStudents[index].squad = true;
     document.querySelector("#isbtn").classList.add("clickedbutton");
   }
 
   function removeSquad() {
     document.querySelector("#isbtn").classList.remove("clickedbutton");
+    if (systemIsHacked === true) {
+      setTimeout(function () {
+        alert("Wuups.. Can't do that.. HA HA HA!");
+      }, 100);
+      //alert("Wuups.. Can't do that.. HA HA HA!");
+    }
     allStudents[index].squad = false;
   }
+}
+
+function hackTheSystem() {
+  if (systemIsHacked === false) {
+    //add me to studentlist
+    console.log("You have been hacked!");
+    const thisIsMe = Object.create(studentTemplate);
+    thisIsMe.firstname = "Amalie";
+    thisIsMe.lastname = "Grøn";
+    thisIsMe.middlename = null;
+    thisIsMe.nickname = "The Hacker";
+    thisIsMe.photo = "me.png";
+    thisIsMe.house = "Hufflepuff";
+    thisIsMe.gender = "girl";
+    thisIsMe.prefect = true;
+    thisIsMe.expelled = false;
+    thisIsMe.bloodstatus = "Pure-blood";
+    thisIsMe.squad = false;
+
+    allStudents.unshift(thisIsMe);
+
+    //fuck up blood-status
+    systemIsHacked = true;
+
+    messWithBloodstatus();
+
+    buildList();
+  } else {
+    alert("Wuups.. System's allready been hacked!");
+  }
+  setTimeout(function () {
+    alert("The Dark Lord is back, you have been hacked!!! ☠ ☠ ☠");
+  }, 100);
+}
+
+function messWithBloodstatus() {
+  allStudents.forEach((student) => {
+    if (student.bloodstatus === "Muggle-born") {
+      student.bloodstatus = "Pure-blood";
+    } else if (student.bloodstatus === "Half-blood") {
+      student.bloodstatus = "Pure-blood";
+    } else {
+      let bloodNumber = Math.floor(Math.random() * 3);
+      if (bloodNumber === 0) {
+        student.bloodstatus = "Muggle-born";
+      } else if (bloodNumber === 1) {
+        student.bloodstatus = "Half-blood";
+      } else {
+        student.bloodstatus = "Pure-blood";
+      }
+    }
+  });
 }
