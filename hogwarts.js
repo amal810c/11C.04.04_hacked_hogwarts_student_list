@@ -449,7 +449,7 @@ function openSingleStudent(student) {
   popup.querySelector(".blodstatus").textContent = student.bloodstatus;
   popup.querySelector(".house").textContent = student.house;
   popup.querySelector("#house_crest").src =
-    "housecrests/" + student.house.toLowerCase() + ".png";
+    "housecrests/" + student.house + ".png";
   if (student.photo != null) {
     popup.querySelector("#popup_student_pic").src = "images/" + student.photo;
   } else {
